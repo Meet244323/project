@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Clone</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="chat-container">
+        <div id="sidebar">
+            <div id="sidebar-header">
+                <h2>Contacts</h2>
+            </div>
+            <ul id="contact-list">
+                <li class="contact">Alice</li>
+                <li class="contact">Bob</li>
+                <li class="contact">Charlie</li>
+                <li class="contact">David</li>
+                <li class="contact">Eve</li>
+                <li class="contact">Frank</li>
+            </ul>
+        </div>
+        <div id="chat-area">
+            <div id="chat-header">
+                <h2>Chat with Alice</h2>
+            </div>
+            <div id="message-list">
+                <!-- Messages will be dynamically added here -->
+            </div>
+            <div id="message-input">
+                <input type="text" id="message-text" placeholder="Type your message...">
+                <button id="send-btn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactList = document.querySelectorAll('.contact');
+            const messageList = document.getElementById('message-list');
+            const messageInput = document.getElementById('message-text');
+            const sendButton = document.getElementById('send-btn');
+            const chatHeader = document.getElementById('chat-header');
+
+            // Dictionary to store message histories
+            const messageHistories = {
+                'Alice': [
+                    'Hello!',
+                    'How are you?',
+                    'I’ve been thinking about our last conversation.'
+                ],
+                'Bob': [
+                    'Hey!',
+                    'I saw the latest movie, it was great!',
+                    'Let’s catch up sometime this week.'
+                ],
+                'Charlie': [
+                    'Hi there!',
+                    'Have you read the new book?',
+                    'We should hang out soon.'
+                ],
+                'David': [
+                    'Hello!',
+                    'Did you get my email?',
+                    'Let’s meet for lunch tomorrow.'
+                ],
+                'Eve': [
+                    'Hi!',
+                    'Are you free this weekend?',
+                    'We need to talk about the project.'
+                ],
+                'Frank': [
+                    'Hey!',
+                    'The weather is amazing today.',
+                    'Want to go for a walk?'
+                ]
+            };
+
+            contactList.forEach(contact => {
+                contact.addEventListener('click', function() {
+                    const contactName = this.textContent.trim();
+                    chatHeader.textContent = `Chat with ${contactName}`;
+                    messageList.innerHTML = ''; // Clear previous messages
+
+                    // Simulate loading previous messages or connecting to the user's chat history
+                    if (messageHistories[contactName]) {
+                        messageHistories[contactName].forEach((message, index) => {
+                            setTimeout(() => {
+                                simulateReceivedMessage(contactName, message);
+                            }, index * 1000); // Simulate delay between messages
+                        });
+                    }
+                });
+            });
+
+            sendButton.addEventListener('click', function() {
+                const messageText = messageInput.value.trim();
+                if (messageText !== '') {
+                    sendMessage('You', messageText, 'sent');
+                    messageInput.value = '';
+                    setTimeout(() => {
+                        const currentChat = chatHeader.textContent.replace('Chat with ', '');
+                        if (messageHistories[currentChat]) {
+                            simulateReceivedMessage(currentChat, 'Got your message!');
+                        }
+                    }, 1000);
+                }
+            });
+
+            function sendMessage(sender, message, type) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message', type);
+                messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
+                messageList.appendChild(messageElement);
+                messageList.scrollTop = messageList.scrollHeight; // Scroll to bottom
+            }
+
+            function simulateReceivedMessage(sender, message) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message', 'received');
+                messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
+                messageList.appendChild(messageElement);
+                messageList.scrollTop = messageList.scrollHeight; // Scroll to bottom
+            }
+        });
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        #chat-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        #sidebar {
+            width: 250px;
+            background-color: #075e54;
+            color: white;
+            padding: 20px;
+        }
+
+        #sidebar-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #contact-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .contact {
+            cursor: pointer;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .contact:hover {
+            background-color: #128c7e;
+        }
+
+        #chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #chat-header {
+            background-color: #128c7e;
+            color: white;
+            padding: 20px;
+        }
+
+        #message-list {
+            flex: 1;
+            overflow-y: scroll;
+            padding: 20px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            max-width: 80%;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .sent {
+            background-color: #dcf8c6;
+            align-self: flex-end;
+        }
+
+        .received {
+            background-color: #ffffff;
+            align-self: flex-start;
+        }
+
+        #message-input {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #f0f0f0;
+        }
+
+        #message-text {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #send-btn {
+            padding: 10px 20px;
+            margin-left: 10px;
+            background-color: #128c7e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #send-btn:hover {
+            background-color: #075e54;
+        }
+    </style>
+</body>
+</html>

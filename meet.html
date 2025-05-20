@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GTA 5 Text-Based Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #222;
+      color: #fff;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      margin-top: 50px;
+    }
+
+    p {
+      font-size: 18px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 8px;
+      border: none;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #game-container {
+      position: relative;
+      margin-top: 50px;
+    }
+
+    #dot {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    #circle {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background-color: blue;
+      border-radius: 50%;
+      top: 150px;
+      left: calc(50% - 50px);
+    }
+
+    #result {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      display: none;
+    }
+
+    .line {
+      position: absolute;
+      background-color: white;
+      width: 2px;
+      height: 100px;
+    }
+
+    /* Additional lines for more challenging mission */
+    .line:nth-child(6) {
+      top: 100px;
+      left: 250px;
+      height: 150px;
+    }
+
+    .line:nth-child(7) {
+      top: 200px;
+      left: 400px;
+      height: 200px;
+    }
+
+    .line:nth-child(8) {
+      top: 300px;
+      left: 150px;
+      height: 250px;
+    }
+
+    /* Maze lines */
+    .maze-line {
+      position: absolute;
+      background-color: white;
+      width: 2px;
+      height: 50px; /* Adjust height and width for maze lines */
+    }
+
+    /* Maze layout */
+    #maze {
+      position: absolute;
+      top: 100px;
+      left: 100px;
+    }
+
+    /* Styling for the reset button */
+    #reset-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="home-page">
+    <h1>GTA 5 Text-Based Game</h1>
+    <p>Welcome to Los Santos! You are a new arrival looking to make a name for yourself in this city.</p>
+    <p>What do you want to do?</p>
+    <button onclick="startGame()">Start Game</button>
+  </div>
+
+  <div id="game-container" style="display: none;">
+    <div id="circle" draggable="true" ondragstart="drag(event)"></div>
+    <div id="dot"></div>
+    <div id="result"></div>
+    <!-- Adding more challenging lines -->
+    <div class="line" style="top: 50px; left: 150px;"></div>
+    <div class="line" style="top: 150px; left: 300px;"></div>
+    <div class="line" style="top: 250px; left: 100px;"></div>
+    <div class="line" style="top: 350px; left: 200px;"></div>
+    <div class="line" style="top: 450px; left: 350px;"></div>
+    <div class="line" style="top: 100px; left: 250px; height: 150px;"></div>
+    <div class="line" style="top: 200px; left: 400px; height: 200px;"></div>
+    <div class="line" style="top: 300px; left: 150px; height: 250px;"></div>
+    
+    <!-- Maze layout -->
+    <div id="maze">
+      <div class="maze-line" style="top: 0; left: 0; height: 300px;"></div>
+      <div class="maze-line" style="top: 0; left: 50px; height: 300px;"></div>
+      <div class="maze-line" style="top: 0; left: 100px; height: 100px;"></div>
+      <div class="maze-line" style="top: 0; left: 150px; height: 200px;"></div>
+      <div class="maze-line" style="top: 0; left: 200px; height: 300px;"></div>
+      <div class="maze-line" style="top: 50px; left: 200px; height: 200px;"></div>
+      <div class="maze-line" style="top: 100px; left: 200px; height: 200px;"></div>
+      <div class="maze-line" style="top: 50px; left: 250px; height: 100px;"></div>
+      <div class="maze-line" style="top: 150px; left: 250px; height: 200px;"></div>
+      <div class="maze-line" style="top: 200px; left: 250px; height: 100px;"></div>
+      <div class="maze-line" style="top: 250px; left: 250px; height: 200px;"></div>
+      <div class="maze-line" style="top: 300px; left: 250px; height: 100px;"></div>
+      <div class="maze-line" style="top: 350px; left: 250px; height: 100px;"></div>
+      <div class="maze-line" style="top: 400px; left: 250px; height: 100px;"></div>
+      <div class="maze-line" style="top: 300px; left: 300px; height: 200px;"></div>
+      <div class="maze-line" style="top: 400px; left: 300px; height: 100px;"></div>
+      <div class="maze-line" style="top: 450px; left: 300px; height: 100px;"></div>
+      <div class="maze-line" style="top: 350px; left: 350px; height: 100px;"></div>
+      <div class="maze-line" style="top: 400px; left: 350px; height: 150px;"></div>
+      <div class="maze-line" style="top: 450px; left: 350px; height: 50px;"></div>
+      <div class="maze-line" style="top: 450px; left: 400px; height: 50px;"></div>
+      <div class="maze-line" style="top: 400px; left: 400px; height: 50px;"></div>
+      <div class="maze-line" style="top: 350px; left: 400px; height: 100px;"></div>
+      <div class="maze-line" style="top: 300px; left: 400px; height: 50px;"></div>
+    </div>
+
+    <!-- Reset button -->
+    <button id="reset-button" onclick="resetGame()">Reset Game</button>
+  </div>
+
+  <script>
+    var dot = document.getElementById("dot");
+    var dotPosition = { x: 50, y: 150 };
+    var originalDotPosition = { x: 50, y: 150 }; // Store original position for reset
+    var animationFrame;
+
+    function startGame() {
+      var playerName = prompt("Enter your name:");
+      if (playerName) {
+        alert("Welcome, " + playerName + "! Let's get started.");
+        document.getElementById("home-page").style.display = "none";
+        document.getElementById("game-container").style.display = "block";
+        playMission();
+        window.addEventListener("keydown", moveDot);
+      } else {
+        alert("Please enter your name to start the game.");
+      }
+    }
+
+    function playMission() {
+      alert("Use W, A, S, D keys to move the red dot!");
+    }
+
+    function drag(ev) {
+      ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    document.getElementById("dot").ondrop = function(ev) {
+      ev.preventDefault();
+      var data = ev.dataTransfer.getData("text");
+      if (data === "circle") {
+        document.getElementById("result").innerText = "You won the mission!";
+        document.getElementById("result").style.display = "block";
+      } else {
+        alert("Mission failed. Try again.");
+      }
+    }
+
+    document.getElementById("dot").ondragover = function(ev) {
+      ev.preventDefault();
+    }
+
+    function moveDot(event) {
+      var key = event.key.toLowerCase();
+      var speed = 5;
+      switch (key) {
+        case "w":
+          dotPosition.y -= speed;
+          break;
+        case "a":
+          dotPosition.x -= speed;
+          break;
+        case "s":
+          dotPosition.y += speed;
+          break;
+        case "d":
+          dotPosition.x += speed;
+          break;
+      }
+      updateDotPosition();
+      checkWin();
+      // Request animation frame for smoother movement
+      animationFrame = requestAnimationFrame(moveDot);
+    }
+
+    function updateDotPosition() {
+      dot.style.top = dotPosition.y + "px";
+      dot.style.left = dotPosition.x + "px";
+    }
+
+    function checkWin() {
+      var circle = document.getElementById("circle");
+      var dotRect = dot.getBoundingClientRect();
+      var circleRect = circle.getBoundingClientRect();
+
+      if (
+        dotRect.left >= circleRect.left &&
+        dotRect.right <= circleRect.right &&
+        dotRect.top >= circleRect.top &&
+        dotRect.bottom <= circleRect.bottom
+      ) {
+        document.getElementById("result").innerText = "You won the mission!";
+        document.getElementById("result").style.display = "block";
+        stopGame();
+      }
+
+      var mazeLines = document.querySelectorAll(".maze-line");
+      for (var i = 0; i < mazeLines.length; i++) {
+        var mazeLineRect = mazeLines[i].getBoundingClientRect();
+        if (
+          dotRect.left < mazeLineRect.right &&
+          dotRect.right > mazeLineRect.left &&
+          dotRect.top < mazeLineRect.bottom &&
+          dotRect.bottom > mazeLineRect.top
+        ) {
+          alert("You hit an obstacle! You lost the mission.");
+          resetGame();
+        }
+      }
+    }
+
+    function stopGame() {
+      cancelAnimationFrame(animationFrame);
+      window.removeEventListener("keydown", moveDot);
+    }
+
+    function resetGame() {
+      dotPosition = { x: originalDotPosition.x, y: originalDotPosition.y };
+      updateDotPosition();
+      document.getElementById("result").style.display = "none";
+      window.addEventListener("keydown", moveDot);
+      animationFrame = requestAnimationFrame(moveDot); // Restart animation loop
+    }
+  </script>
+</body>
+</html>

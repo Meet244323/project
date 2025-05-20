@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Cricket Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+    }
+    
+    #player {
+      width: 50px;
+      height: 50px;
+      background-color: #00ff00; /* Green color for the player */
+      border-radius: 50%; /* Rounded shape */
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Simple Cricket Game</h1>
+  
+  <div id="player"></div> <!-- Player representation -->
+
+  <p id="scoreboard">Score: 0</p>
+  
+  <button onclick="bat()">Bat</button>
+  
+  <script>
+    let score = 0;
+    let playerElement = document.getElementById('player');
+
+    function bat() {
+      let runs = Math.floor(Math.random() * 7); // Random runs between 0 and 6
+      score += runs;
+      document.getElementById('scoreboard').textContent = `Score: ${score}`;
+      
+      // Move player randomly within the boundary after each bat
+      movePlayer();
+
+      if (runs === 0) {
+        alert(`Out! Final Score: ${score}`);
+        score = 0; // Reset score
+        document.getElementById('scoreboard').textContent = `Score: ${score}`;
+      }
+    }
+
+    function movePlayer() {
+      // Generate random position within the play area
+      let x = Math.floor(Math.random() * (window.innerWidth - 50)); // Adjust 50 for player width
+      let y = Math.floor(Math.random() * (window.innerHeight - 50)); // Adjust 50 for player height
+
+      playerElement.style.left = x + 'px';
+      playerElement.style.top = y + 'px';
+    }
+  </script>
+</body>
+</html>

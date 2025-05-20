@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML Game with Moving Background</title>
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100%;
+    }
+
+    #game-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    #player {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background-color: red;
+        left: 50%;
+        bottom: 0;
+        transform: translateX(-50%);
+    }
+
+    #background {
+        position: absolute;
+        width: 200%; /* Double the width to ensure continuous scrolling */
+        height: 100%;
+        background: url('https://via.placeholder.com/800x600') repeat-x, linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1)); /* Sample background image and color box */
+        animation: moveBackground 10s linear infinite;
+    }
+
+    @keyframes moveBackground {
+        0% {
+            transform: translateX(0%);
+        }
+        100% {
+            transform: translateX(-50%); /* Move background by half its width */
+        }
+    }
+</style>
+</head>
+<body>
+<div id="game-container">
+    <div id="background"></div>
+    <div id="player"></div>
+</div>
+
+<script>
+    // JavaScript for game logic
+    document.addEventListener('keydown', function(event) {
+        const player = document.getElementById('player');
+        const gameContainer = document.getElementById('game-container');
+        const playerPosition = parseFloat(getComputedStyle(player).left);
+
+        switch(event.key) {
+            case 'ArrowLeft':
+                if (playerPosition > 0) {
+                    player.style.left = playerPosition - 10 + 'px';
+                    gameContainer.style.backgroundPositionX = parseFloat(getComputedStyle(gameContainer).backgroundPositionX) + 10 + 'px';
+                }
+                break;
+            case 'ArrowRight':
+                if (playerPosition < gameContainer.offsetWidth - player.offsetWidth) {
+                    player.style.left = playerPosition + 10 + 'px';
+                    gameContainer.style.backgroundPositionX = parseFloat(getComputedStyle(gameContainer).backgroundPositionX) - 10 + 'px';
+                }
+                break;
+        }
+    });
+</script>
+</body>
+</html>
